@@ -13,21 +13,15 @@ knitr::opts_chunk$set(
 library(tidyverse)
 ```
 
+# Problem 1 
+
 ## Importing Data
 
 ```{r}
 data("penguins", package = "palmerpenguins")
 ```
 
-## Penguins Data Overview
-
-The penguins dataset has 344 rows and 8 columns. There are 8 variables in the dataset. This includes 3 unique species of penguins and 3 different islands identified in the data. There are 168 male penguins and 165 female penguins. The other variables in the penguin dataset include bill length, bill depth, flipper length, body mass, and year. The mean flipper length is 201 mm. 
-
-```{r}
-nrow(penguins)
-ncol(penguins)
-skimr::skim(penguins)
-```
+The penguins dataset has `r nrow(penguins)` rows and `r ncol(penguins)` columns. The variables in the dataset are `r names(penguins)`. The mean flipper length is `r mean(penguins$flipper_length_mm, na.rm = TRUE)` mm. The frequency among the different species of penguins in the data is `r table(penguins$species)`. The frequency among the different islands in the data is `r table(penguins$island)`. The frequency between female and male in the dataset is `r table(penguins$sex)` respectively. 
 
 ## Penguin Plot
 
@@ -36,9 +30,60 @@ plot_penguin =
   ggplot(penguins, 
        aes(x = bill_length_mm, y = flipper_length_mm, color = species)) +
   geom_point()
-
 plot_penguin
 
 ggsave("penguin_scatterplot.png", plot = plot_penguin)
+```
+
+# Problem 2
+
+## Making a Data Frame 
+
+```{r}
+hw_data = 
+  tibble(
+    vec_num = rnorm(10), 
+    vec_log = (vec_num > 0), 
+    vec_char = c("this", "is", "hw1", "data", "here", "that", "we", "need", "for", "class"), 
+    vec_fac = factor(c("low", "mid", "high", "low", "mid", "high", "low", "mid", "high", "low"))
+  )
+```
+
+## Mean of Variables 
+
+The mean can be derived from of the numbered vector and logical vector. The character vector and factor vector result in an "NA" mean value. 
+
+```{r}
+hw_data %>% 
+  pull(vec_num) %>% 
+  mean()
+
+hw_data %>% 
+  pull(vec_log) %>% 
+  mean()
+
+hw_data %>% 
+  pull(vec_char) %>% 
+  mean()
+
+hw_data %>% 
+  pull(vec_fac) %>% 
+  mean()
+```
+
+## Change Variable Type 
+
+When the character is converted to numeric the string of characters is not recognized as another pattern and all values for the vector become "Na". This corresponds with the result previously received when attempting to take the mean of the character vector. 
+
+The logical variables have an integer vector associated with their constants. This is recognized as TRUE = 1 and FALSE = 0 which are the values assigned to the variable once it is converted to a numeric. This integer value is known in R which is why the mean of the logical variable resulted in an integer. 
+
+The factor variable does not have an integer innately associated with the factor levels and resulted in an mean of "NA". When the factor is converted to a numeric, it is assigned a integer number that corresponds to the factor level. 
+
+```{r eval=FALSE}
+hw_data$vec_fac <- as.numeric(hw_data$vec_fac)
+
+hw_data$vec_char<- as.numeric(hw_data$vec_char)
+
+hw_data$vec_log <- as.numeric(hw_data$vec_log)
 ```
 
