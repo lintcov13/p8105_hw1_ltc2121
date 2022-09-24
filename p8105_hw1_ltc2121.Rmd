@@ -1,0 +1,44 @@
+---
+title: "p8105_hw1_ltc2121"
+output: github_document
+---
+
+```{r, echo = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  fig.width = 6,
+  fig.asp = .6,
+  out.width = "90%"
+)
+library(tidyverse)
+```
+
+## Importing Data
+
+```{r}
+data("penguins", package = "palmerpenguins")
+```
+
+## Penguins Data Overview
+
+The penguins dataset has 344 rows and 8 columns. There are 8 variables in the dataset. This includes 3 unique species of penguins and 3 different islands identified in the data. There are 168 male penguins and 165 female penguins. The other variables in the penguin dataset include bill length, bill depth, flipper length, body mass, and year. The mean flipper length is 201 mm. 
+
+```{r}
+nrow(penguins)
+ncol(penguins)
+skimr::skim(penguins)
+```
+
+## Penguin Plot
+
+```{r}
+plot_penguin = 
+  ggplot(penguins, 
+       aes(x = bill_length_mm, y = flipper_length_mm, color = species)) +
+  geom_point()
+
+plot_penguin
+
+ggsave("penguin_scatterplot.png", plot = plot_penguin)
+```
+
